@@ -45,6 +45,15 @@ public class BadIOGUI {
         canvas.add(write, BorderLayout.CENTER);
         frame.setContentPane(canvas);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+
+        final JPanel center = new JPanel();
+        center.setLayout(new BoxLayout(center, BoxLayout.X_AXIS));
+        center.add(write, BoxLayout.X_AXIS);
+        
+        final JButton read = new JButton("Read from file");
+        center.add(read, BoxLayout.X_AXIS);
+
+        frame.setContentPane(center);
         /*
          * Handlers
          */
@@ -66,6 +75,24 @@ public class BadIOGUI {
                 }
             }
         });
+
+        read.addActionListener(new ActionListener() {
+
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                try {
+                    final List<String> lines = Files.readAllLines(new File(PATH).toPath(), StandardCharsets.UTF_8);
+                    for (String line : lines) {
+                        System.out.println(line);
+                        
+                    }
+                } catch (Exception e1) {
+                    JOptionPane.showMessageDialog(frame, e1, "Error", JOptionPane.ERROR_MESSAGE);
+                    e1.printStackTrace(); // NOPMD: allowed as this is just an exercise
+                }
+            }
+            
+        });
     }
 
     private void display() {
@@ -86,6 +113,8 @@ public class BadIOGUI {
          * flag makes the OS window manager take care of the default positioning
          * on screen. Results may vary, but it is generally the best choice.
          */
+        frame.pack();
+
         frame.setLocationByPlatform(true);
         /*
          * OK, ready to push the frame onscreen
